@@ -20,8 +20,7 @@ const { nodeResolver, nodesResolver } = nodeDefinitions((globalId, ctx, resolveI
   if (resolveInfo.fieldNodes && resolveInfo.fieldNodes[0] && resolveInfo.fieldNodes[0].name.value === 'nodes') {
     resolveInfo.fieldNodes[0].name.value = 'node';
   }
-  const node = getNode(id, type, ctx, resolveInfo);
-  return node;
+  return getNode(id, type, ctx, resolveInfo);
 });
 
 export default {

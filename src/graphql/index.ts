@@ -1,4 +1,4 @@
-import { makeExecutableSchema, mergeSchemas } from 'graphql-tools';
+import { makeExecutableSchema } from 'graphql-tools';
 import { mergeTypes } from 'merge-graphql-schemas';
 import Product from './product';
 import NodeModule from './node';
