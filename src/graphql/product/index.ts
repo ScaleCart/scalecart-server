@@ -18,18 +18,17 @@ export default {
         uniqueKey: 'id',
         fields: {
           name: {
-            sqlExpr: (table) => {
-              return `COALESCE(${table}.name->:language, ${table}.name->:defaultLanguage)`;
-            }
+            sqlExpr: table => `COALESCE(${table}.name->:language, ${table}.name->:defaultLanguage)`
           },
           description: {
-            sqlExpr: (table) => {
-              return `COALESCE(${table}.description->:language, ${table}.description->:defaultLanguage)`;
-            }
+            sqlExpr: table => `COALESCE(${table}.description->:language, ${table}.description->:defaultLanguage)`
           },
           discountPrice: {
             sqlColumn: 'discount_price',
           },
+          mainImage: {
+            sqlExpr: table => `${table}.images->0`
+          }
         },
       },
     });

@@ -12,10 +12,11 @@ type Product implements Node {
   stock: Int!
   price: String!
   discountPrice: String
-  images: [ProductImages!]!
+  mainImage: ProductImage
+  images: [ProductImage!]!
 }
 
-type ProductImages {
+type ProductImage {
   url: String!
 }
 

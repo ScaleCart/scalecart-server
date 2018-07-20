@@ -24,7 +24,7 @@ exports.up = async function(knex) {
   await knex.schema.createTable('cart', (table) => {
     table.bigIncrements();
     table.timestamps();
-    table.bigInteger('customer_id').notNullable().references('customer.id');
+    table.bigInteger('customer_id').references('customer.id');
   });
 
   await knex.schema.createTable('cart_item', (table) => {
