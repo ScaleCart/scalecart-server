@@ -1,7 +1,5 @@
-import * as Knex from 'knex';
 import joinMonster from 'join-monster';
 
-const knex = Knex(require('../../knexfile'));
 const isProd = process.env.NODE_ENV === 'production';
 const ACCEPTED_LANGUAGES = JSON.parse(process.env.ACCEPTED_LANGUAGES);
 const DEFAULT_LANGUAGE = process.env.DEFAULT_LANGUAGE;
@@ -13,11 +11,11 @@ function dbCall(sql, args, ctx) {
   if (!isProd && ctx && ctx.response) {
     ctx.set('X-SQL-Preview', ctx.response.get('X-SQL-Preview') + '%0A%0A' + sql.replace(/%/g, '%25').replace(/\n/g, '%0A'));
   }
-  return knex.raw(sql, { ...args, language, defaultLanguage: DEFAULT_LANGUAGE });
+  return ctx.db.knex.raw(sql, { ...args, language, defaultLanguage: DEFAULT_LANGUAGE });
 }
 
 export function runQuery(args, ctx, resolveInfo) {
-  return joinMonster(resolveInfo, joinMonsterOptions, sql => dbCall(sql, args, ctx))
+  return joinMonster(resolveInfo, ctx, sql => dbCall(sql, args, ctx), joinMonsterOptions)
     .catch(error => {
       console.error(error);
       throw isProd ? "Query error" : error;

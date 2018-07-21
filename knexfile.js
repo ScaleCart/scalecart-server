@@ -1,4 +1,8 @@
 require('dotenv').config();
+const _ = require('lodash');
+const PgResult = require('pg/lib/result');
+
+const camelCaseKeys = obj => _.mapKeys(obj, (v, k) => _.camelCase(k));
 
 module.exports = {
   client: 'postgresql',
@@ -15,5 +19,15 @@ module.exports = {
   },
   migrations: {
     tableName: 'knex_migrations'
+  },
+  wrapIdentifier: (value, origImpl, queryContext) => value === '*' ? value : origImpl(_.snakeCase(value)),
+  postProcessResponse: (result, queryContext) => {
+    if (result instanceof PgResult) {
+      return result;
+    } else if (Array.isArray(result)) {
+      return result.map(v => camelCaseKeys(v));
+    } else {
+      return camelCaseKeys(result);
+    }
   }
 };
