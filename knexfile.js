@@ -20,14 +20,18 @@ module.exports = {
   migrations: {
     tableName: 'knex_migrations'
   },
-  wrapIdentifier: (value, origImpl, queryContext) => value === '*' ? value : origImpl(_.snakeCase(value)),
+  wrapIdentifier: (value, origImpl, queryContext) => {
+    return value === '*' ? origImpl(value) : origImpl(_.snakeCase(value));
+  },
   postProcessResponse: (result, queryContext) => {
     if (result instanceof PgResult) {
       return result;
     } else if (Array.isArray(result)) {
       return result.map(v => camelCaseKeys(v));
-    } else {
+    } else if (result instanceof Object) {
       return camelCaseKeys(result);
+    } else {
+      return result;
     }
   }
 };
