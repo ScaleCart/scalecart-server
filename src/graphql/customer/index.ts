@@ -11,6 +11,11 @@ export default {
       Customer: {
         sqlTable: 'customer',
         uniqueKey: 'id',
+        fields: {
+          firstName: { sqlColumn: 'first_name' },
+          lastName: { sqlColumn: 'last_name' },
+          name: { sqlDeps: [ 'first_name', 'last_name' ] },
+        }
       },
       Query: {
         fields: {

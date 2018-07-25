@@ -25,6 +25,9 @@ type Query {
 }
 `;
 
-const { connectionType: ProductConnection } = connectionDefinitions({ name: 'Product' });
+const { connectionType: ProductConnection } = connectionDefinitions({
+  name: 'Product',
+  connectionFields: 'total: Int!',
+});
 
 export default [typeDefs, ProductConnection];

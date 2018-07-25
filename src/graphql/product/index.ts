@@ -8,9 +8,11 @@ export default {
   decorator(schema) {
     joinMonsterAdapt(schema, {
       Query: {
-        products: {
-          sqlPaginate: true,
-          orderBy: 'id',
+        fields: {
+          products: {
+            sqlPaginate: true,
+            orderBy: 'id',
+          }
         }
       },
       Product: {

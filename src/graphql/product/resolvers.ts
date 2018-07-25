@@ -7,8 +7,7 @@ import { runQuery } from '../utils';
 const resolvers = {
   Query: {
     products(parent, args, ctx, resolveInfo) {
-      return runQuery(args, ctx, resolveInfo)
-        .then(data => connectionFromArray(data, args));
+      return runQuery(args, ctx, resolveInfo);
     },
   },
   Product: {

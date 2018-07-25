@@ -25,6 +25,7 @@ type Customer {
   email: String!
   firstName: String!
   lastName: String!
+  name: String!
 }
 
 input RegisterInput {

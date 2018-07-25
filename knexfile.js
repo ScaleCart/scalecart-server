@@ -21,6 +21,8 @@ module.exports = {
     tableName: 'knex_migrations'
   },
   wrapIdentifier: (value, origImpl, queryContext) => {
+    console.log('wrap');
+    debugger;
     return value === '*' ? origImpl(value) : origImpl(_.snakeCase(value));
   },
   postProcessResponse: (result, queryContext) => {

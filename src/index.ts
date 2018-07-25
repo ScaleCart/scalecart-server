@@ -8,12 +8,11 @@ import { graphqlKoa, graphiqlKoa } from 'apollo-server-koa';
 import schema from './graphql';
 import * as db from './db';
 
-let koaCustomGraphiql, koaStatic, path;
 const isDev = process.env.NODE_ENV === 'development';
 
 const app = new koa();
 const router = new koaRouter();
-const PORT = 3000;
+const PORT = 4000;
 
 app.keys = [process.env.SESSION_SECRET];
 
@@ -23,6 +22,22 @@ declare module 'koa' {
   }
 }
 app.context.db = db;
+
+// Development utils
+if (isDev) {
+  const koaCustomGraphiql = require('koa-custom-graphiql').default;
+  const koaStatic = require('koa-static');
+  const path = require('path');
+  const cors = require('@koa/cors');
+
+  app.use(cors({ credentials: true }));
+  router.get('/graphiql', graphiqlKoa({ endpointURL: '/graphql', }));
+  router.get('/graphsiql', koaCustomGraphiql({
+    css: '/graphiql.css',
+    js: '/graphiql.js'
+  }));
+  app.use(koaStatic(path.resolve(require.resolve('graphsiql'), '..', '..')))
+}
 
 app.use(koaBody());
 
@@ -46,20 +61,6 @@ router.post('/graphql', graphqlKoa(context => ({
   }
 })));
 router.get('/graphql', graphqlKoa({ schema }));
-
-// Development utils
-if (isDev) {
-  koaCustomGraphiql = require('koa-custom-graphiql').default;
-  koaStatic = require('koa-static');
-  path = require('path');
-
-  router.get('/graphiql', graphiqlKoa({ endpointURL: '/graphql',  }));
-  router.get('/graphsiql', koaCustomGraphiql({
-    css: '/graphiql.css',
-    js: '/graphiql.js'
-  }));
-  app.use(koaStatic(path.resolve(require.resolve('graphsiql'), '..', '..')))
-}
 
 app.use(router.routes());
 app.use(router.allowedMethods());

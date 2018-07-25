@@ -1,6 +1,4 @@
 import {
-  toGlobalId,
-  connectionFromArray,
   globalIdResolver,
 } from 'graphql-relay-tools';
 import * as argon2 from 'argon2';
@@ -58,10 +56,7 @@ const resolvers = {
         id: customer.id,
       };
 
-      return {
-        ...customer,
-        // id: toGlobalId('Customer', customer.id),
-      };
+      return customer;;
     },
     async logout(parent, args, ctx, resolveInfo) {
       ctx.session = null;
@@ -71,7 +66,10 @@ const resolvers = {
     },
   },
   Customer: {
-    id: globalIdResolver()
+    id: globalIdResolver(),
+    name(user) {
+      return user.first_name + ' ' + user.last_name
+    }
   },
 }
 
